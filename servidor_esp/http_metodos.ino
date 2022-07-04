@@ -35,19 +35,15 @@ void GET_HORA(){
 */ 
 void POST_JSON_REGISTRO(uint8_t num ,String payload, String clase_api, String tipo_api ){
   HTTPClient http;
-  //http.begin("http://192.168.1.113:3001/api/v1/esp32/");
-  http.begin(String(server_api) + clase_api + "/" + tipo_api);
-  Serial.println("API: " + String(server_api) + clase_api + "/" + tipo_api);
+  http.begin(String(server_api) + "REGISTRO");
+  Serial.println("API: " + String(server_api) + "REGISTRO");
   http.addHeader("Content-Type", "application/json");   
     
-//  Serial.println("----------------------------");
-//  Serial.println(msm_ws);
-//  Serial.println("----------------------------");
-//  
+
     int httpResponseCode = http.POST(payload);
 
   if(httpResponseCode > 0) {
-      Serial.printf("[HTTP] GET... code: %d\n", httpResponseCode);
+      Serial.printf("[HTTP] POST... code: %d\n", httpResponseCode);
       if(httpResponseCode == HTTP_CODE_OK) {
           String payload = http.getString();
           Serial.println("Servidor Res:" + String(payload));
@@ -60,10 +56,36 @@ void POST_JSON_REGISTRO(uint8_t num ,String payload, String clase_api, String ti
   }
   respuestaSERVER(num, payload);
   http.end();
-  //delay(200);
 }
+/*
+ **************************************************************** 
+*                         TIEMPO REAL               
+ * **************************************************************
+*/
+void PATCH_TIEMPO_REAL(uint8_t num ,String payload, String clase_api, String tipo_api ){
+  HTTPClient http;
+  http.begin(String(server_api) + "TIEMPO_REAL");
+  Serial.println("API: " + String(server_api) + "TIEMPO_REAL");
+  http.addHeader("Content-Type", "application/json");   
+    
 
+    int httpResponseCode = http.PATCH(payload);
 
+  if(httpResponseCode > 0) {
+      Serial.printf("[HTTP] PATCH... code: %d\n", httpResponseCode);
+      if(httpResponseCode == HTTP_CODE_OK) {
+          String payload = http.getString();
+          Serial.println("Servidor Res:" + String(payload));
+          boolean_SERVER = String(payload);
+      }
+  } else {
+      boolean_SERVER = false;
+      Serial.printf("[HTTP] PATCH... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
+      
+  }
+  respuestaSERVER(num, payload);
+  http.end();
+}
 
 /*
  **************************************************************** 

@@ -29,10 +29,12 @@ void DeserializeObject(uint8_t num ,String payload ){
     Serial.println("//////////////////////////////");
     Serial.println(payload);
     Serial.println("//////////////////////////////");
-
+    
+    Serial2.println("{"+payload+"}");
+    
     ///////////////////////////////////////////////////////////////////////////
     if(statusWifi == 1){
-      if((clase == "CONTADOR" || clase == "ALCANCIA") && status_ws == "0"){
+      if((clase == "CONTADOR" || clase == "ALCANCIA") && (status_ws == "0") && (tipo  != "TIEMPO_REAL" ) ){
         Serial.println("POST API MODULES");
         POST_JSON_REGISTRO((num),String(payload),clase, tipo);
       }
@@ -47,17 +49,19 @@ void DeserializeObject(uint8_t num ,String payload ){
         Serial.println("GET API STATUS");
         GET_STATUS((num),String(payload));
         //SerializeSTATUS();
-      }else if(Apertura_Gaveta == "1"){    //   SE HACE UN UPDATE 
-        Serial.println();    
+      }else if(tipo  == "TIEMPO_REAL"){
+        PATCH_TIEMPO_REAL((num),String(payload),clase, tipo);
       }else {
         Serial.println("NO IDENTIFICADO");
-        webSocket.sendTXT(num,"NO ESTAS REGISTRADO");
+        webSocket.sendTXT(num,"VALOR NO ACEPTADO, REVISA EL MENSAJE");
         
       }
+      ////////////////////////***************************************
     } else {
-      Serial2.print("{"+payload+"}");
+      // EN CASO DE NO HABER INTERNET 
+      SerializeSTATUS((num),String(payload));
     }
-    
+    ///////////////////////////////////////////////////////////////////////////
 }
 
 /*
@@ -92,12 +96,8 @@ void SerializeSTATUS(uint8_t num,String payload ) {
    doc["ruta"]        = ruta;
    doc["unidad"]      = unidad;
    doc["ramal"]       = ramal;
-//    doc["longitud"]             = longitud;
-//    doc["latitud"]              = latitud;
-//    doc["status_server"]        = 0;  //status_server
-//    doc["status_bd"]            = 0;  //status_bd
-//    doc["status_activo"]        = 0;  //status_activo
-//    doc["status_reset_values"]  = 0;  //status_reset_values
+   doc["serialMDVR"]  = serialMDVR;
+
 
     size_t n = serializeJson(doc, buffer);
     msm_res_api = buffer;

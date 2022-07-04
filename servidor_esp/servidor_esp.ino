@@ -9,30 +9,22 @@
 #include <ArduinoJson.hpp>
 #include <ArduinoJson.h>
 
-// RED A INTERNET
-const char* ssid = "TP-Link_6C72";
-const char* password = "16823099";
-//const char* ssid = "RED ACCESA";
-//const char* password = "037E32E7";
-
-const char *ssid_local = "RED-ESP32-01";
-const char *password_local = "1234567890";
-
-const char* server_api = "http://192.168.1.113:3001/api/v1/esp32/";
-
-////RED STATIC
-//// Set your Static IP address
-//IPAddress local_IP(192, 168, 0, 101);
-//// Set your Gateway IP address
-//IPAddress gateway(192, 168, 0, 1);
-//IPAddress subnet(255, 255, 0, 0);
-//IPAddress primaryDNS(8, 8, 8, 8);   //optional
-//IPAddress secondaryDNS(8, 8, 4, 4); //optional
-
 // PARAMETROS
 String ruta = "34A";
 String unidad = "48";
 String ramal = "HEROES";
+String serialMDVR = "0055005252";
+
+// RED A INTERNET
+//const char* ssid = "TP-Link_6C72";
+//const char* password = "16823099";
+const char* ssid = "RED ACCESA";
+const char* password = "037E32E7";
+
+const char *ssid_local = "RED-ESP32-01";
+const char *password_local = "1234567890";
+
+const char* server_api = "http://192.168.1.215:3001/api/v1/esp32/";
 
 WebSocketsServer webSocket = WebSocketsServer(81);
 //
@@ -111,7 +103,7 @@ void setup() {
 */
 
 void loop() {
-//  setupWiFi();
+
   wifi_local();
   Serial.println("Iniciando PRIMER NUCLEO");
   Serial.setDebugOutput(true);
@@ -126,9 +118,9 @@ void loop() {
 
 
 /*
- * 
- *    SEGUNDO NUCLEO
- * 
+ **************************************************************************************** 
+ *            SEGUNDO NUCLEO
+ ****************************************************************************************  
 */
 
 //
@@ -140,24 +132,21 @@ void toggleLED(void *parameter){
   statusWifi = true;
   unsigned long previousMillis = 0;
   unsigned long interval = 30000;
-//  Serial.println("Status de Wifi:" + String(statusWifi));
+
   while(1){
       unsigned long currentMillis = millis();
-//      Serial.println("Status de Wifi:" + String(statusWifi));
-      // if WiFi is down, try reconnecting every CHECK_WIFI_TIME seconds
+
       while ((WiFi.status() != WL_CONNECTED) ) {
         statusWifi = false;
-//        Serial.println("Status de Wifi:" + String(statusWifi));
-//        Serial.print(millis());
+
         Serial.println("Reconnecting to WiFi...");
         WiFi.disconnect();
         WiFi.reconnect();
         delay(1000);
-//        previousMillis = currentMillis;
+
         
       }
       statusWifi = true;
-//      Serial.println("Status de Wifi:" + String(statusWifi));
       delay(1000);
   }
 }

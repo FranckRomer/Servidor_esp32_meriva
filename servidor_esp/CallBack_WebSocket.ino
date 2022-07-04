@@ -65,8 +65,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
           webSocket.sendTXT(num, hora_servidor);
         }
         else if (msm_ws == "DONDE_ESTAMOS?"){
-          //GET_HORA();
-          //delay(300);
+
           statusGPS((num),msm_ws);
           webSocket.sendTXT(num, msm_res_api);
         }
@@ -74,9 +73,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
         else{
           // Se deserializa cualquier JSON
           DeserializeObject((num),msm_ws);
-          //funcion_repeticion((num),msm_ws);
-          // Se MANDA LA RESPUESTA DE   API
-          //webSocket.sendTXT(num, msm_res_api);
+          
         }
           
         break;
