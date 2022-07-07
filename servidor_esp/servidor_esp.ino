@@ -111,6 +111,7 @@ void loop() {
   
   Serial.println("Servidor webSocketEvent iniciado");
   while(1){
+    WiFiClient client = server.available();
     webSocket.onEvent(webSocketEvent);
     webSocket.loop(); 
   }
