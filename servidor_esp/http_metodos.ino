@@ -48,6 +48,7 @@ void POST_JSON_REGISTRO(uint8_t num ,String payload, String clase_api, String ti
           String payload = http.getString();
           Serial.println("Servidor Res:" + String(payload));
           boolean_SERVER = String(payload);
+          //msm_res_api = String(payload);
       }
   } else {
       boolean_SERVER = false;
@@ -92,7 +93,7 @@ void PATCH_TIEMPO_REAL(uint8_t num ,String payload, String clase_api, String tip
 *                         PATCH_GPS();               
  * **************************************************************
 */ 
-void PATCH_GPS(uint8_t num ,String payload ){
+void PATCH_GPS(String payload ){
   HTTPClient http;
   //http.begin("http://192.168.1.113:3001/api/v1/esp32/");
   http.begin(String(server_api) + "gps");
@@ -106,14 +107,14 @@ void PATCH_GPS(uint8_t num ,String payload ){
       if(httpResponseCode == HTTP_CODE_OK) {
           String payload = http.getString();
           Serial.println("Servidor Res:" + String(payload));
-          msm_res_api = String(payload);
+//          msm_res_api = String(payload);
           //webSocket.sendTXT(num, msm_res_api);
       }
   } else {
       msm_res_api = http.errorToString(httpResponseCode).c_str();
       Serial.printf("[HTTP] PATCH... failed, error: %s\n", http.errorToString(httpResponseCode).c_str());
   }
-  webSocket.sendTXT(num, msm_res_api);
+  //webSocket.sendTXT(num, msm_res_api);
   http.end();
   //delay(200);
 }
@@ -136,13 +137,14 @@ void GET_STATUS(uint8_t num,String payload ){
           String payload = http.getString();
           status_servidor = payload;
           msm_res_api = payload;
-          webSocket.sendTXT(num, msm_res_api);
-          Serial.println("Servidor Res:" + String(status_servidor));
+          respuestaConfirmadaSTATUS(num, payload);
+//          webSocket.sendTXT(num, msm_res_api);
+//          Serial.println("Servidor Res:" + String(status_servidor));
       }
   } else {
       Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
       //status_servidor = "status_servidor: ERROR";
-      SerializeSTATUS(num, payload);
+      respuestaDenegadaSTATUS(num, payload);
   }
   http.end();
 }

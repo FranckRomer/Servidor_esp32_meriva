@@ -50,7 +50,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
         
         msm_ws = String((char *)payload);
         Serial.println("");
-        Serial.println("-----------------------------------------------------------------");
+        Serial.println("-----------------------------------------------------------------------------------");
         Serial.printf("[%u] get Text: %s\n", num, payload);
         //Serial.println("");
 
@@ -60,9 +60,10 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
          *---------------------------------------------------------   
          */
         if (msm_ws == "TIENES_LA_HORA?"){
-          GET_HORA();
+          //GET_HORA();
           //delay(300);
-          webSocket.sendTXT(num, hora_servidor);
+          horaServidorESP32((num),msm_ws);
+          //webSocket.sendTXT(num, hora_servidor);
         }
         else if (msm_ws == "DONDE_ESTAMOS?"){
 

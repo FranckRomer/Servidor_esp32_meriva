@@ -7,10 +7,13 @@ void setupWiFi() {
 
 //  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
-  Serial.print("Connecting to WiFi ..");
+  
+  Serial.println("..................Connecting to WiFi..................");
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.print('.');
+    Serial.println("..................");
+    statusWifi = false;
     delay(1000);
+//    gps_serial();
   }
   Serial.println(WiFi.localIP());
 
