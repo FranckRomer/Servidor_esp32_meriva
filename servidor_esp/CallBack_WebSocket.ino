@@ -60,10 +60,13 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
          *---------------------------------------------------------   
          */
         if (msm_ws == "TIENES_LA_HORA?"){
-          //GET_HORA();
-          //delay(300);
-          horaServidorESP32((num),msm_ws);
-          //webSocket.sendTXT(num, hora_servidor);
+          if(statusWifi == 1){
+            GET_HORA((num),msm_ws);
+          } else {
+            Serial.println("No hay internet, da la hora del esp32");
+            horaServidorESP32((num),msm_ws);
+          }
+          
         }
         else if (msm_ws == "DONDE_ESTAMOS?"){
 

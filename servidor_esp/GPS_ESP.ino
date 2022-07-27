@@ -7,6 +7,9 @@ void gps_serial(){
     gps.encode(Serial1.read());
     if (gps.location.isUpdated()){
        gps_status = 1;
+       // Speed in kilometers per hour (double)
+      Serial.print("Speed in km/h = "); 
+      Serial.println(gps.speed.kmph()); 
       ///////////////////////////////////////////////////////
       preferences.begin("my-app", false);
       
@@ -18,6 +21,7 @@ void gps_serial(){
       String eeprom_hora      = "hora";
       String eeprom_minuto    = "minuto";
       String eeprom_segundo   = "segundo";
+      
 
       gps_neo.latitud   =  String(gps.location.lat(),6);
       gps_neo.longitud  =  String(gps.location.lng(),6);
@@ -27,6 +31,7 @@ void gps_serial(){
       gps_neo.hora      =  gps.time.hour();
       gps_neo.minuto    =  gps.time.minute();
       gps_neo.segundo   =  gps.time.second();
+      gps_neo.speed   =  gps.speed.kmph();
 
       //  Se cambia la Hora a la zona de mexico
       timeChangeZone();
@@ -55,10 +60,11 @@ void gps_serial(){
   Serial.println("^^^^^^^^^ GPS ACTUALIZADO ^^^^^^^^^^");
 
   displayTiempo();
-  jsonGPS();
+//  jsonGPS();
+  jsonGPS_ruta();
   displayTiempo();
   
-  delay(900);
+  delay(400);
     }
   }
 }

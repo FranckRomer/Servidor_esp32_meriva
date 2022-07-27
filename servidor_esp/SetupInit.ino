@@ -4,7 +4,7 @@
  * ************************************************************************************************
 */
 void setupWiFi() {
-
+  
 //  WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   
@@ -24,6 +24,7 @@ void setupWiFi() {
 void wifi_local(){
   Serial.println();
   Serial.println("Configuring access point...");
+ // WiFi.softAPConfig(local_IP, gateway, subnet);
 
   // You can remove the password parameter if you want the AP to be open.
   WiFi.softAP(ssid_local, password_local);

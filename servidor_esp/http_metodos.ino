@@ -3,7 +3,7 @@
 *                         GET_HORA                
  * **************************************************************
 */ 
-void GET_HORA(){
+void GET_HORA(uint8_t num ,String payload){
   HTTPClient http;
   //Serial.print("[HTTP] begin...\n");
   //http.begin("http://192.168.0.100:3001/api/v1/esp32/hora"); //HTTP
@@ -19,12 +19,13 @@ void GET_HORA(){
       if(httpCode == HTTP_CODE_OK) {
           String payload = http.getString();
           hora_servidor = payload;
-          
+          webSocket.sendTXT(num, hora_servidor);
           Serial.println("Servidor Res:" + String(hora_servidor));
       }
   } else {
     hora_servidor = "ERROR HORA";
       Serial.printf("[HTTP] GET... failed, error: %s\n", http.errorToString(httpCode).c_str());
+      horaServidorESP32((num),msm_ws);
   }
   http.end();
 }
@@ -128,15 +129,20 @@ void GET_STATUS(uint8_t num,String payload ){
   HTTPClient http;
 //  http.begin("http://192.168.1.113:3001/api/v1/esp32/status"); //HTTP
   http.begin(String(server_api) + "status"); //HTTP
+  http.addHeader("Content-Type", "application/json");  
 
-  int httpCode = http.GET();
+//  int httpCode = http.GET();
+
+  int httpCode = http.POST(payload);
 
   if(httpCode > 0) {
-      Serial.printf("[HTTP] GET... code: %d\n", httpCode);
+      Serial.printf("[HTTP] POST... code: %d\n", httpCode);
       if(httpCode == HTTP_CODE_OK) {
           String payload = http.getString();
           status_servidor = payload;
           msm_res_api = payload;
+//          Serial.println("_________________________________");
+//          Serial.println(String(payload));        
           respuestaConfirmadaSTATUS(num, payload);
 //          webSocket.sendTXT(num, msm_res_api);
 //          Serial.println("Servidor Res:" + String(status_servidor));
