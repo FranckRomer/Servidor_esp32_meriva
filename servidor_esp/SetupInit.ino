@@ -10,7 +10,7 @@ void setupWiFi() {
   
   Serial.println("..................Connecting to WiFi..................");
   while (WiFi.status() != WL_CONNECTED) {
-    Serial.println("..................");
+//    Serial.println("..................");
     statusWifi = false;
     delay(1000);
 //    gps_serial();

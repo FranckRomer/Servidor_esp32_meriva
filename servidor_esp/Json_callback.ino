@@ -356,7 +356,7 @@ void jsonGPS_ruta(){
 //    DeserializationError error = deserializeJson(doc, payload);
 //    if (error) { return; }
     i++;
-    if(i>=30){
+    if(i>=60){
       i=0;}
     Serial.println("dato: " + String(i));
     Serial.println("LONGITUD:" + latitud_sim [i] );
@@ -364,10 +364,10 @@ void jsonGPS_ruta(){
     
     doc["clase"] = "GPS";
     doc["Tipo"] = "TIEMPO_REAL";    
-//    doc["latitud"] = latitud_sim [i]  ;
-//    doc["longitud"] = longitud_sim [i] ;
-    doc["latitud"] = gps_neo.latitud  ;
-    doc["longitud"] = gps_neo.longitud ;
+    doc["latitud"] = latitud_sim [i]  ;
+    doc["longitud"] = longitud_sim [i] ;
+//    doc["latitud"] = gps_neo.latitud  ;
+//    doc["longitud"] = gps_neo.longitud ;
     doc["Fecha_hora"] = String(gps_neo.anio) + "-" + String(gps_neo.mes)+ "-" + String(gps_neo.dia) + " " + String(gps_neo.hora) + ":" + String(gps_neo.minuto) + ":" + String(gps_neo.segundo); 
     doc["ano"] = gps_neo.anio     ;
     doc["mes"] = gps_neo.mes       ;
@@ -404,69 +404,21 @@ void jsonGPS_ruta(){
 }
 
 void envioSerial(String payload){
-    int tamano = (payload.length())/15;
-    String part1 = payload.substring(0,tamano);
-    String part2 = payload.substring(tamano,tamano*2);
-    String part3 = payload.substring(tamano*2,tamano*3);
-    String part4 = payload.substring(tamano*3,tamano*4);
-    String part5 = payload.substring(tamano*4,tamano*5);
-    String part6 = payload.substring(tamano*5,tamano*6);
-    String part7 = payload.substring(tamano*6,tamano*7);
-    String part8 = payload.substring(tamano*7,tamano*8);
-    String part9 = payload.substring(tamano*8,tamano*9);
-    String part10 = payload.substring(tamano*9,tamano*10);
-    String part11 = payload.substring(tamano*10,tamano*11);
-    String part12 = payload.substring(tamano*11,tamano*12);
-    String part13 = payload.substring(tamano*12,tamano*13);
-    String part14 = payload.substring(tamano*13,tamano*14);
-    String part15 = payload.substring(tamano*14,(payload.length()));
-    Serial.println(tamano);
-    
-    Serial.println("[part1]" + part1 + "[/part1]");
-    Serial.println("[part2]" + part2 + "[/part2]");
-    Serial.println("[part3]" + part3 + "[/part3]");
-    Serial.println("[part4]" + part4 + "[/part4]");
-    Serial.println("[part5]" + part5 + "[/part5]");
-    Serial.println("[part6]" + part6 + "[/part6]");
-    Serial.println("[part7]" + part7 + "[/part7]");
-    Serial.println("[part8]" + part8 + "[/part8]");
-    Serial.println("[part9]" + part9 + "[/part9]");
-    Serial.println("[part10]" + part10 + "[/part10]");
-    Serial.println("[part11]" + part11 + "[/part11]");
-    Serial.println("[part12]" + part12 + "[/part12]");
-    Serial.println("[part13]" + part13 + "[/part13]");
-    Serial.println("[part14]" + part14 + "[/part14]");
-    Serial.println("[part15]" + part15 + "[/part15]");
+  int tamano = (payload.length())/30;
+  String partes[31]; 
+  Serial.println(payload);
   
-
-    Serial2.println("  [part1]" + part1 + "[/part1]  ");
-    delay(30);
-    Serial2.println("  [part2]" + part2 + "[/part2]  ");
-    delay(30);
-    Serial2.println("  [part3]" + part3 + "[/part3]  ");
-    delay(30);
-    Serial2.println("  [part4]" + part4 + "[/part4]  ");
-    delay(30);
-    Serial2.println("  [part5]" + part5 + "[/part5]  ");
-    delay(30);
-    Serial2.println("  [part6]" + part6 + "[/part6]  ");
-    delay(30);
-    Serial2.println("  [part7]" + part7 + "[/part7]  ");
-    delay(30);
-    Serial2.println("  [part8]" + part8 + "[/part8]  ");
-    delay(30);
-    Serial2.println("  [part9]" + part9 + "[/part9]  ");
-    delay(30);
-    Serial2.println("  [part10]" + part10 + "[/part10]  ");
-    delay(30);
-    Serial2.println("  [part11]" + part11 + "[/part11]  ");
-    delay(30);
-    Serial2.println("  [part12]" + part12 + "[/part12]  ");
-    delay(30);
-    Serial2.println("  [part13]" + part13 + "[/part13]  ");
-    delay(30);
-    Serial2.println("  [part14]" + part14 + "[/part14]  ");
-    delay(30);
-    Serial2.println("  [part15]" + part15 + "[/part15]  ");  
+  for (int i = 1; i < 30; i++){
+    /* code */
+    partes[i] = payload.substring((i-1)*tamano,tamano*i);
+    Serial.println("["+String(i)+"]" + String(partes[i]) + "[/"+String(i)+"]");
+    Serial2.println("    ["+String(i)+"]" + String(partes[i]) + "[/"+String(i)+"]    ");
+    delay(100);
+  }
+  partes[30] = payload.substring(tamano*29,(payload.length()));
+  Serial.println("["+String(30)+"]" + String(partes[30]) + "[/"+String(30)+"]");
+  Serial2.println("    ["+String(30)+"]" + String(partes[30]) + "[/"+String(30)+"]    ");
+  
+  delay(150);
 
 }
