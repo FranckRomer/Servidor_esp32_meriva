@@ -285,6 +285,7 @@ void respuestaDenegadaSTATUS(uint8_t num ,String payload ) {
    doc["delete_sd_contador2"]   = 0;
    doc["tarfia_alcancia"]      = 8;
    doc["tiempo_cobro"]         = 10;
+   
    doc["ruta"]        = ruta;
    doc["unidad"]      = unidad;
    doc["ramal"]       = ramal;
@@ -356,11 +357,36 @@ void jsonGPS_ruta(){
 //    DeserializationError error = deserializeJson(doc, payload);
 //    if (error) { return; }
     i++;
-    if(i>=60){
-      i=0;}
+    if(i>=60){i=1;}
     Serial.println("dato: " + String(i));
     Serial.println("LONGITUD:" + latitud_sim [i] );
     Serial.println("LATITUD:" + longitud_sim [i] );
+
+    
+//    distancia_act = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), latitud_sim[i-1].toDouble(), longitud_sim [i-1].toDouble());
+//    calculoDistancia(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), latitud_sim[i-1].toDouble(), longitud_sim [i-1].toDouble());
+//    double distancia_act = distancia;
+//    //delay(100);
+//    calculoDistancia(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), geocercaLat, geocercaLong);
+//    distancia_operacion = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), geocercaLat, geocercaLong);
+//    double distancia_operacion = distancia;
+
+    // CALCULO DE DISTANCIA
+    double distancia_act = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), latitud_sim[i-1].toDouble(), longitud_sim [i-1].toDouble());
+    double distancia_operacion = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), geocercaLat, geocercaLong);
+    // GEOSERCA 
+    boolean operacion = false;
+    if(distancia_operacion >= tamGeoSerca){
+      operacion = true;
+      gps_neo.distacia_recorrida = gps_neo.distacia_recorrida + distancia_act;
+    } else{
+      operacion = false;
+      gps_neo.distacia_recorrida = 0.0;
+    }
+    Serial.println("****************************************************");
+    Serial.println(String(distancia,6));
+    Serial.println("Distancia entre Central y autobus: " + String(distancia_operacion, 6));
+    Serial.println("Distancia Recorrida: " + String(gps_neo.distacia_recorrida, 6));
     
     doc["clase"] = "GPS";
     doc["Tipo"] = "TIEMPO_REAL";    
@@ -375,11 +401,14 @@ void jsonGPS_ruta(){
     doc["hora"] = gps_neo.hora     ;
     doc["minuto"] = gps_neo.minuto   ;
     doc["segundo"] = gps_neo.segundo   ;
-    doc["velocidad_kmh"] = gps_neo.speed   ;
+    doc["velocidad_kmh"] = gps_neo.speed   ;    
     doc["ruta"]        = ruta;
     doc["unidad"]      = unidad;
     doc["ramal"]       = ramal;
     doc["terid"]  = terid;
+    doc["operacion"] = operacion;
+    doc["distancia_respecto_central"] = distancia_operacion / 1000;
+    doc["distacia_recorrida"] = gps_neo.distacia_recorrida / 1000;
 
     size_t n = serializeJson(doc, buffer);
 
@@ -411,14 +440,14 @@ void envioSerial(String payload){
   for (int i = 1; i < 30; i++){
     /* code */
     partes[i] = payload.substring((i-1)*tamano,tamano*i);
-    Serial.println("["+String(i)+"]" + String(partes[i]) + "[/"+String(i)+"]");
+//    Serial.println("["+String(i)+"]" + String(partes[i]) + "[/"+String(i)+"]");
     Serial2.println("    ["+String(i)+"]" + String(partes[i]) + "[/"+String(i)+"]    ");
-    delay(100);
+    delay(30);
   }
   partes[30] = payload.substring(tamano*29,(payload.length()));
-  Serial.println("["+String(30)+"]" + String(partes[30]) + "[/"+String(30)+"]");
+//  Serial.println("["+String(30)+"]" + String(partes[30]) + "[/"+String(30)+"]");
   Serial2.println("    ["+String(30)+"]" + String(partes[30]) + "[/"+String(30)+"]    ");
   
-  delay(150);
+  delay(200);
 
 }

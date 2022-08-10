@@ -187,3 +187,28 @@ void displayTiempo(){
   display.println(String(gps_neo.hora) + ":" + String(gps_neo.minuto) + ":" + String(gps_neo.segundo));
   display.display();
 }
+
+boolean calculoDistancia(double latitud2, double longitud2, double latitud, double longitud){
+  // Calculo de Distancia
+      int radioTierra = 6378;
+      double radLat = latitud2 - latitud;
+      double radLong = longitud2 - longitud;
+      double a = pow(sin(radLat/2),2) + cos(latitud)*cos(latitud2)*pow(sin(radLong/2),2);
+      double c = 2* atan2(sqrt(a),sqrt(1-a));
+      distancia = radioTierra * c;
+//
+//      Serial.println("******************************************");
+//      Serial.println("DISTANCIA: " + String(distancia,6));
+      //static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
+//      unsigned long distanceKmToLondon =
+//        (unsigned long)TinyGPSPlus::distanceBetween(
+//        latitud2,
+//        longitud2,
+//        latitud, 
+//        longitud) / 1000;
+//      Serial.print((" /////////////////  Distancia: ")); 
+//      Serial.println(String(distanceKmToLondon, 6));
+      distancia = TinyGPSPlus::distanceBetween(latitud2,longitud2,latitud,longitud);
+      //Serial.println(String(distancia_prueb, 6));
+      return distancia; 
+}
