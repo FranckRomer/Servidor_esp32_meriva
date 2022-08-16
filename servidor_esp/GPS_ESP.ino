@@ -47,16 +47,7 @@ void gps_serial(){
 
        preferences.end();
       
-//      
-//  Serial.println("^^^^^^^^^ GPS ACTUALIZADO ^^^^^^^^^^");
-//  Serial.println("latitud:" + String(gps_neo.latitud));
-//  Serial.println("longitud:" + String(gps_neo.longitud));
-//  Serial.println("anio:" + String(gps_neo.anio));
-//  Serial.println("mes:" + String(gps_neo.mes));
-//  Serial.println("dia:" + String(gps_neo.dia));
-//  Serial.println("hora:" + String(gps_neo.hora));
-//  Serial.println("minuto:" + String(gps_neo.minuto));
-//  Serial.println("segundo:" + String(gps_neo.segundo));
+
   Serial.println("^^^^^^^^^ GPS ACTUALIZADO ^^^^^^^^^^");
 
   displayTiempo();
@@ -140,14 +131,14 @@ void displayTiempo(){
 
   if (gps_status == 0){
     gps_neo.segundo ++;
-    if(gps_neo.segundo >= 60){
+    if(gps_neo.segundo >= 61){
       gps_neo.segundo = 0;
       gps_neo.minuto++;
       gps_status = 0;
-      if(gps_neo.minuto >= 60){
+      if(gps_neo.minuto >= 61){
         gps_neo.minuto = 0;
         gps_neo.hora ++;
-        if(gps_neo.hora >= 24){
+        if(gps_neo.hora >= 25){
           gps_neo.hora = 0;
         }
       }
@@ -196,18 +187,7 @@ boolean calculoDistancia(double latitud2, double longitud2, double latitud, doub
       double a = pow(sin(radLat/2),2) + cos(latitud)*cos(latitud2)*pow(sin(radLong/2),2);
       double c = 2* atan2(sqrt(a),sqrt(1-a));
       distancia = radioTierra * c;
-//
-//      Serial.println("******************************************");
-//      Serial.println("DISTANCIA: " + String(distancia,6));
-      //static const double LONDON_LAT = 51.508131, LONDON_LON = -0.128002;
-//      unsigned long distanceKmToLondon =
-//        (unsigned long)TinyGPSPlus::distanceBetween(
-//        latitud2,
-//        longitud2,
-//        latitud, 
-//        longitud) / 1000;
-//      Serial.print((" /////////////////  Distancia: ")); 
-//      Serial.println(String(distanceKmToLondon, 6));
+
       distancia = TinyGPSPlus::distanceBetween(latitud2,longitud2,latitud,longitud);
       //Serial.println(String(distancia_prueb, 6));
       return distancia; 

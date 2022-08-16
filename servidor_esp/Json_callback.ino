@@ -40,9 +40,7 @@ void DeserializeObject(uint8_t num ,String payload ){
     
 
     Serial.println("//////////////////////////////");
-    
-    
-    
+
     ///////////////////////////////////////////////////////////////////////////
     if(statusWifi == 1){
       
@@ -105,24 +103,7 @@ void STATUS_sinInternet(uint8_t num,String payload ) {
     DynamicJsonDocument doc (4096);
 
     /*JSON DESEREALIZAR RESPUESTA STATUS*/  
-//    {
-//            "terid":"0071005252",
-//            "status_server":1,
-//            "status_bd":1,
-//            "status_activo_alcancia":0,
-//            "status_activo_contador1":0,
-//            "status_activo_contador2":0,
-//            "status_corte":0,
-//            "delete_sd_alcancia":0,
-//            "delete_sd_contador1":0,
-//            "delete_sd_contador2":0,
-//            "tarfia_alcancia":8,
-//            "tiempo_cobro":10,
-//            "actualizacion_firmware_alcancia" : false,
-//            "actualizacion_firmware_contador1" : false,
-//            "actualizacion_firmware_contador2" : false,
-//            "actualizacion_firmware_servidor_esp" : false,
-//          }
+
    doc["terid"]  = terid;
    doc["status_server"]        = 1;
    doc["status_bd"]            = 1;
@@ -149,11 +130,6 @@ void STATUS_sinInternet(uint8_t num,String payload ) {
    doc["respuesta_SERVER"]        = true;
    doc["statusWifi"] = statusWifi; 
    
-   
-   
-   
-   
-
     size_t n = serializeJson(doc, buffer);
     msm_res_api = buffer;
     Serial.println(msm_res_api);
@@ -344,110 +320,4 @@ void jsonGPS(){
       
     
     delay(250);
-}
-int i = 0;
-
-/*
- * ------------------------------------------------------------------------
- *  jsonGPS_ruta
- */
-void jsonGPS_ruta(){
-  char buffer[4096];
-    DynamicJsonDocument doc (4096);
-//    DeserializationError error = deserializeJson(doc, payload);
-//    if (error) { return; }
-    i++;
-    if(i>=60){i=1;}
-    Serial.println("dato: " + String(i));
-    Serial.println("LONGITUD:" + latitud_sim [i] );
-    Serial.println("LATITUD:" + longitud_sim [i] );
-
-    
-//    distancia_act = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), latitud_sim[i-1].toDouble(), longitud_sim [i-1].toDouble());
-//    calculoDistancia(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), latitud_sim[i-1].toDouble(), longitud_sim [i-1].toDouble());
-//    double distancia_act = distancia;
-//    //delay(100);
-//    calculoDistancia(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), geocercaLat, geocercaLong);
-//    distancia_operacion = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), geocercaLat, geocercaLong);
-//    double distancia_operacion = distancia;
-
-    // CALCULO DE DISTANCIA
-    double distancia_act = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), latitud_sim[i-1].toDouble(), longitud_sim [i-1].toDouble());
-    double distancia_operacion = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), geocercaLat, geocercaLong);
-    // GEOSERCA 
-    boolean operacion = false;
-    if(distancia_operacion >= tamGeoSerca){
-      operacion = true;
-      gps_neo.distacia_recorrida = gps_neo.distacia_recorrida + distancia_act;
-    } else{
-      operacion = false;
-      gps_neo.distacia_recorrida = 0.0;
-    }
-    Serial.println("****************************************************");
-    Serial.println(String(distancia,6));
-    Serial.println("Distancia entre Central y autobus: " + String(distancia_operacion, 6));
-    Serial.println("Distancia Recorrida: " + String(gps_neo.distacia_recorrida, 6));
-    
-    doc["clase"] = "GPS";
-    doc["Tipo"] = "TIEMPO_REAL";    
-    doc["latitud"] = latitud_sim [i]  ;
-    doc["longitud"] = longitud_sim [i] ;
-//    doc["latitud"] = gps_neo.latitud  ;
-//    doc["longitud"] = gps_neo.longitud ;
-    doc["Fecha_hora"] = String(gps_neo.anio) + "-" + String(gps_neo.mes)+ "-" + String(gps_neo.dia) + " " + String(gps_neo.hora) + ":" + String(gps_neo.minuto) + ":" + String(gps_neo.segundo); 
-    doc["ano"] = gps_neo.anio     ;
-    doc["mes"] = gps_neo.mes       ;
-    doc["dia"] = gps_neo.dia       ;
-    doc["hora"] = gps_neo.hora     ;
-    doc["minuto"] = gps_neo.minuto   ;
-    doc["segundo"] = gps_neo.segundo   ;
-    doc["velocidad_kmh"] = gps_neo.speed   ;    
-    doc["ruta"]        = ruta;
-    doc["unidad"]      = unidad;
-    doc["ramal"]       = ramal;
-    doc["terid"]  = terid;
-    doc["operacion"] = operacion;
-    doc["distancia_respecto_central"] = distancia_operacion / 1000;
-    doc["distacia_recorrida"] = gps_neo.distacia_recorrida / 1000;
-
-    size_t n = serializeJson(doc, buffer);
-
-    if (statusWifi == 1){
-      //UPDATE / PATCH
-      
-      PATCH_GPS(String(buffer));
-    } else{
-//      Serial2.println("{" + String(buffer) + "}" );
-      // ........................................
-      String payload = String(buffer);
-      envioSerial(String(payload));
-
-    }
-    display.setCursor(100,0);
-    display.setTextSize(1);
-    display.drawBitmap(100,0, logo_signal, 15, 15,BLACK, WHITE);
-    display.display();
-      
-    
-    delay(250);
-}
-
-void envioSerial(String payload){
-  int tamano = (payload.length())/30;
-  String partes[31]; 
-  Serial.println(payload);
-  
-  for (int i = 1; i < 30; i++){
-    /* code */
-    partes[i] = payload.substring((i-1)*tamano,tamano*i);
-//    Serial.println("["+String(i)+"]" + String(partes[i]) + "[/"+String(i)+"]");
-    Serial2.println("    ["+String(i)+"]" + String(partes[i]) + "[/"+String(i)+"]    ");
-    delay(30);
-  }
-  partes[30] = payload.substring(tamano*29,(payload.length()));
-//  Serial.println("["+String(30)+"]" + String(partes[30]) + "[/"+String(30)+"]");
-  Serial2.println("    ["+String(30)+"]" + String(partes[30]) + "[/"+String(30)+"]    ");
-  
-  delay(200);
-
 }

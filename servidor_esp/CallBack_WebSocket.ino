@@ -103,31 +103,31 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
     msm_ws = "";
 }
 
-void funcion_repeticion(uint8_t num ,String payload){
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-  DeserializeObject((num),payload);
-  delay(100);
-}
+//void funcion_repeticion(uint8_t num ,String payload){
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//  DeserializeObject((num),payload);
+//  delay(100);
+//}
