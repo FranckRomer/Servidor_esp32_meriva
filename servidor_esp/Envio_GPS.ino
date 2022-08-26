@@ -4,11 +4,11 @@
  *  ademas cuando regrese de la ruta este mandara un post de la ruta terminada 
  */
 void jsonGPS_ruta(){
-    i++;
-    if(i>=60){i=1;}
-    Serial.println("dato: " + String(i));
-    Serial.println("LONGITUD:" + latitud_sim [i] );
-    Serial.println("LATITUD:" + longitud_sim [i] );
+//    i++;
+//    if(i>=60){i=1;}
+//    Serial.println("dato: " + String(i));
+//    Serial.println("LONGITUD:" + latitud_sim [i] );
+//    Serial.println("LATITUD:" + longitud_sim [i] );
     // CALCULO DE DISTANCIA
     double distancia_act = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), latitud_sim[i-1].toDouble(), longitud_sim [i-1].toDouble());
     double distancia_operacion = TinyGPSPlus::distanceBetween(latitud_sim[i].toDouble(), longitud_sim[i].toDouble(), geocercaLat, geocercaLong);
@@ -63,17 +63,17 @@ void GPS_TIEMPO_REAL(){
     doc["latitud"] = gps_neo.latitud  ;
     doc["longitud"] = gps_neo.longitud ;
     doc["Fecha_hora"] = string_hora; 
-    doc["ano"] = gps_neo.anio     ;
-    doc["mes"] = gps_neo.mes       ;
-    doc["dia"] = gps_neo.dia       ;
-    doc["hora"] = gps_neo.hora     ;
-    doc["minuto"] = gps_neo.minuto   ;
-    doc["segundo"] = gps_neo.segundo   ;
+//    doc["ano"] = gps_neo.anio     ;
+//    doc["mes"] = gps_neo.mes       ;
+//    doc["dia"] = gps_neo.dia       ;
+//    doc["hora"] = gps_neo.hora     ;
+//    doc["minuto"] = gps_neo.minuto   ;
+//    doc["segundo"] = gps_neo.segundo   ;
     doc["velocidad_kmh"] = gps_neo.speed   ;    
     doc["ruta"]        = ruta;
     doc["unidad"]      = unidad;
     doc["ramal"]       = ramal;
-    doc["terid"]  = terid;
+    doc["busid"]  = busid;
     doc["distancia_respecto_central"] = gps_neo.distancia_operacion / 1000;
     doc["distacia_recorrida"] = gps_neo.distacia_recorrida / 1000;
     
@@ -126,7 +126,7 @@ void GPS_POST(){
     doc["fecha_inicio"] = gps_neo.fecha_inicio;
     doc["fecha_fin"] = string_hora;
     doc["distancia_recorrida"] = gps_neo.distacia_recorrida;
-    doc["terid"] = terid;
+    doc["busid"] = busid;
     doc["ruta"]        = ruta;
     doc["unidad"]      = unidad;
     doc["ramal"]       = ramal;

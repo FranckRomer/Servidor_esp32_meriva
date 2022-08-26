@@ -21,7 +21,7 @@ TinyGPSPlus gps;
 String ruta = "34A";
 String unidad = "48";
 String ramal = "HEROES";
-String terid = "007100DDA2";
+String busid = "TRANEL1001";
 double geocercaLat = 19.033876066372855;
 double geocercaLong = -98.20367032097322;
 //bool tamGeoSerca = 250;
@@ -35,7 +35,7 @@ const char* password = "16823099";
 //const char* ssid = "RED ACCESA";
 //const char* password = "037E32E7";
 
-const char *ssid_local = "RED-ESP32-" + random(1,100);
+const char *ssid_local = "RED_ESP32_PRUEBA";
 const char *password_local = "1234567890";
 
 const char* server_api = "http://74.208.233.208:3001/api/v1/esp32/";
@@ -96,7 +96,7 @@ void setup() {
   preferences.begin("my-app", false);
   lectura_eeprom();
   preferences.end();
-
+  
   //task to run forever
   xTaskCreatePinnedToCore(
             toggleLED,        //Funcion a llamar

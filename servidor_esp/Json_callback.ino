@@ -22,7 +22,7 @@ void DeserializeObject(uint8_t num ,String payload ){
     doc["ruta"]        = ruta;
     doc["unidad"]      = unidad;
     doc["ramal"]       = ramal;
-    doc["terid"]  = terid;
+    doc["busid"]  = busid;
     if(tipo == "TIEMPO_REAL"){
         doc["latitud"] = gps_neo.latitud   ;
         doc["longitud"] = gps_neo.longitud  ;
@@ -104,7 +104,7 @@ void STATUS_sinInternet(uint8_t num,String payload ) {
 
     /*JSON DESEREALIZAR RESPUESTA STATUS*/  
 
-   doc["terid"]  = terid;
+   doc["busid"]  = busid;
    doc["status_server"]        = 1;
    doc["status_bd"]            = 1;
    doc["status_activo_alcancia"] = 0;
@@ -222,7 +222,7 @@ void respuestaConfirmadaSTATUS(uint8_t num ,String payload ) {
     DynamicJsonDocument doc (4096);
     DeserializationError error = deserializeJson(doc, payload);
     if (error) { return; }
-
+    
     bool actualizacion_firmware_alcancia         = doc["actualizacion_firmware_alcancia"];
     bool actualizacion_firmware_contador1         = doc["actualizacion_firmware_contador1"];
     bool actualizacion_firmware_contador2         = doc["actualizacion_firmware_contador2"];
@@ -284,7 +284,7 @@ void respuestaDenegadaSTATUS(uint8_t num ,String payload ) {
    doc["ruta"]        = ruta;
    doc["unidad"]      = unidad;
    doc["ramal"]       = ramal;
-   doc["terid"]  = terid;
+   doc["busid"]  = busid;
    doc["latitud"] = gps_neo.latitud   ;
    doc["longitud"] = gps_neo.longitud  ;
    
@@ -320,7 +320,7 @@ void jsonGPS(){
     doc["ruta"]        = ruta;
     doc["unidad"]      = unidad;
     doc["ramal"]       = ramal;
-    doc["terid"]  = terid;
+    doc["busid"]  = busid;
 
     size_t n = serializeJson(doc, buffer);
 
