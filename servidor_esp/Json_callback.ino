@@ -35,7 +35,7 @@ void DeserializeObject(uint8_t num ,String payload ){
     Serial.println(payload);
 
     // ........................................
-    Serial.println(payload.length());
+//    Serial.println(payload.length());
 //    envioSerial(String(payload));
     
 
@@ -222,17 +222,36 @@ void respuestaConfirmadaSTATUS(uint8_t num ,String payload ) {
     DynamicJsonDocument doc (4096);
     DeserializationError error = deserializeJson(doc, payload);
     if (error) { return; }
+
+    bool actualizacion_firmware_alcancia         = doc["actualizacion_firmware_alcancia"];
+    bool actualizacion_firmware_contador1         = doc["actualizacion_firmware_contador1"];
+    bool actualizacion_firmware_contador2         = doc["actualizacion_firmware_contador2"];
+    bool actualizacion_firmware_servidor_esp         = doc["actualizacion_firmware_servidor_esp"];
     
     //dataSnd_string = String(json);
     doc["latitud"] = gps_neo.latitud   ;
     doc["longitud"] = gps_neo.longitud  ;
-    doc["statusWifi"] = statusWifi;
+    // Condicional  para activar el wifi de los distintos dispositivos 
+    if(actualizacion_firmware_alcancia || actualizacion_firmware_contador1 || actualizacion_firmware_contador2){
+      doc["statusWifi"] = statusWifi;
+    } else{
+      doc["statusWifi"] = 0;
+    }
     
+    if(actualizacion_firmware_servidor_esp){
+      Serial.println("!!!!!!!!!!! ESTOY LISTO PARA LA ACTUALIZACION PATRON !!!!!!!!!!!");
+      delay(1500);      
+      // ACUALIZACION DE M-DASH
+    }
     
     size_t n = serializeJson(doc, buffer);
     msm_res_api = buffer;
     Serial.println("____________________________________");
     Serial.println(msm_res_api);
+    Serial.println(actualizacion_firmware_alcancia);
+    Serial.println(actualizacion_firmware_contador1);
+    Serial.println(actualizacion_firmware_contador2);
+    
     webSocket.sendTXT(num, msm_res_api);
 }
 

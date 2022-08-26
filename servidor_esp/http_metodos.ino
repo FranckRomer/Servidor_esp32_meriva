@@ -134,9 +134,11 @@ void GET_STATUS(uint8_t num,String payload ){
 //  int httpCode = http.GET();
 
   int httpCode = http.POST(payload);
+//  Serial.println("_________________________________");
+//  Serial.println(payload);
 
   if(httpCode > 0) {
-      Serial.printf("[HTTP] POST... code: %d\n", httpCode);
+      Serial.printf("[HTTP] POST_STATUS... code: %d\n", httpCode);
       if(httpCode == HTTP_CODE_OK) {
           String payload = http.getString();
           status_servidor = payload;

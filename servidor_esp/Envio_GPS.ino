@@ -58,10 +58,10 @@ void GPS_TIEMPO_REAL(){
     stringHora();
 //    doc["clase"] = "GPS";
 //    doc["Tipo"] = "TIEMPO_REAL";    
-    doc["latitud"] = latitud_sim [i]  ;
+//    doc["latitud"] = latitud_sim [i]  ;
     doc["longitud"] = longitud_sim [i] ;
-//    doc["latitud"] = gps_neo.latitud  ;
-//    doc["longitud"] = gps_neo.longitud ;
+    doc["latitud"] = gps_neo.latitud  ;
+    doc["longitud"] = gps_neo.longitud ;
     doc["Fecha_hora"] = string_hora; 
     doc["ano"] = gps_neo.anio     ;
     doc["mes"] = gps_neo.mes       ;
@@ -76,6 +76,7 @@ void GPS_TIEMPO_REAL(){
     doc["terid"]  = terid;
     doc["distancia_respecto_central"] = gps_neo.distancia_operacion / 1000;
     doc["distacia_recorrida"] = gps_neo.distacia_recorrida / 1000;
+    
 
     gps_neo.contador_gps ++;
     if(gps_neo.contador_gps >= tiempo_registros){
@@ -124,8 +125,11 @@ void GPS_POST(){
     doc["Tipo"] = "REGISTRO_VUELTA";
     doc["fecha_inicio"] = gps_neo.fecha_inicio;
     doc["fecha_fin"] = string_hora;
-    doc["distacia_recorrida"] = gps_neo.distacia_recorrida;
+    doc["distancia_recorrida"] = gps_neo.distacia_recorrida;
     doc["terid"] = terid;
+    doc["ruta"]        = ruta;
+    doc["unidad"]      = unidad;
+    doc["ramal"]       = ramal;
     
     size_t n = serializeJson(doc, buffer);
     if (statusWifi == 1){
