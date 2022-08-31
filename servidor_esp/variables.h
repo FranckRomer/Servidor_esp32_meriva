@@ -18,6 +18,13 @@ class ClassGPS {       // The class
     int contador_gps = 0;
 };
 
+
+
+
+// VARIABLES DE GEOCERCA
+double geocercaLat = 20.011610249112156;
+double geocercaLong = -98.80324750258833;
+bool tamGeoSerca = 300;  // Geo Serca en METROS
 int tiempo_registros = 13;
 double distancia;
 int ban_fecha_inicio = 0;

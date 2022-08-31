@@ -242,6 +242,7 @@ void respuestaConfirmadaSTATUS(uint8_t num ,String payload ) {
       Serial.println("!!!!!!!!!!! ESTOY LISTO PARA LA ACTUALIZACION PATRON !!!!!!!!!!!");
       delay(1500);      
       // ACUALIZACION DE M-DASH
+      actualizacionMDASH();
     }
     
     size_t n = serializeJson(doc, buffer);

@@ -1,4 +1,3 @@
-
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WiFiClient.h>
@@ -15,30 +14,52 @@
 #include <TinyGPS++.h>
 #include <Preferences.h>
 #include "variables.h"
-
+#include <mDash.h>
 TinyGPSPlus gps;
-// PARAMETROS
-String ruta = "34A";
-String unidad = "48";
-String ramal = "HEROES";
-String busid = "TRANEL1001";
-double geocercaLat = 19.033876066372855;
-double geocercaLong = -98.20367032097322;
-//bool tamGeoSerca = 250;
-bool tamGeoSerca = 10;  // Geo Serca en METROS
 
-// RED A INTERNET
-const char* ssid = "TP-Link_6C72";
-const char* password = "16823099";
-//const char* ssid = "TP-Link_6C72";  ///   TP-Link_6C72
-//const char* password = "16823099";  ////  16823099
-//const char* ssid = "RED ACCESA";
-//const char* password = "037E32E7";
+/**********************************************************************
+ *  PARAMETROS  QUE CAMBIAN 
+ ***********************************************************************
+*/
+// PARAMETROS  QUE CAMBIAN 
+String busid = "TRANEL1031";
 
-const char *ssid_local = "RED_ESP32_PRUEBA";
+//RED A INTERNET
+const char* ssid = "MikroTik_6C72";
+const char* password = "1234567890";
+
+// RED DEL ESP
+const char *ssid_local = "TRANEL1031";
 const char *password_local = "1234567890";
 
+// key de m-dash
+#define keyMDASH "3ys6Fy91RPY1hrGLS1utDGA"
+
+String ruta = "TELLEZ-HOSPITAL";
+String unidad = "445";
+String ramal = "TELLEZ";
+
+/*
+// KEY DE M-DASH
+
+/**********************************************************************
+ *   PARAMETROS  QUE CAMBIAN 
+ ***********************************************************************
+*/
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+
+
+
+
 const char* server_api = "http://74.208.233.208:3001/api/v1/esp32/";
+
+
 
 /*
  *     DEFINE
@@ -46,8 +67,8 @@ const char* server_api = "http://74.208.233.208:3001/api/v1/esp32/";
 #define SCREEN_WIDTH 128  //define tamaño de display
 #define SCREEN_HEIGHT 64 
 #define RXD1 4
-//#define RXD1 19
 #define TXD1 2
+//#define RXD1 19 
 
 #define RXD2 16
 #define TXD2 17
@@ -139,6 +160,7 @@ void loop() {
   displayTiempo();
   int unSegundo = 0;
   int reseteo = 0; 
+//  postSTATUS();
   while(1){
     //
     gps_serial();
@@ -158,6 +180,10 @@ void loop() {
       displayTiempo();
       unSegundo = 0;
       gps_status = 0;
+    }
+    //
+    if(unSegundo == 500){
+      postSTATUS();
     }
     if(reseteo == 3600000){
       //Se reinicia el ESP_Servidor 
